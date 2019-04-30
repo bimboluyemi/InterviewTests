@@ -20,12 +20,27 @@ namespace GraduationTracker
             _courseRepository = new CourseRepository();
         }
 
-        public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
+        public Tuple<bool, STANDING, int> HasGraduated(Diploma diploma, Student student)
         {
             var credits = 0;
             var average = 0;
 
-            foreach (var requirement in diploma.Requirements)
+            average = GetStudentAverage(student, diploma.Requirements, out credits);
+
+            var standing = GetStandingByAverage(average);
+
+            var graduated = (standing == STANDING.Average || standing == STANDING.SumaCumLaude || standing == STANDING.MagnaCumLaude) ? true : false;
+            
+            return new Tuple<bool, STANDING, int>(graduated, standing, credits);
+
+        }
+
+        private int GetStudentAverage(Student student, ICollection<Requirement> requirements, out int credit)
+        {
+            var average = 0;
+            var credits = 0;
+
+            foreach (var requirement in requirements)
             {
                 var studentGrade = student.Grades.FirstOrDefault(x => x.CourseId == requirement.CourseId);
                 if (studentGrade != null)
@@ -35,22 +50,15 @@ namespace GraduationTracker
                     {
                         var course = _courseRepository.Get(requirement.CourseId);
                         credits += course.Credits;
-                        
+
                     }
                 }
             }
-        
-            average = average / diploma.Requirements.Count;
-
-            var standing = GetStanding(average);
-
-            var graduated = (standing == STANDING.Average || standing == STANDING.SumaCumLaude || standing == STANDING.MagnaCumLaude) ? true : false;
-            
-            return new Tuple<bool, STANDING>(graduated, standing);
-
+            credit = credits;
+            return average / requirements.Count;
         }
 
-        private STANDING GetStanding(int average)
+        private STANDING GetStandingByAverage(int average)
         {
             var standing = STANDING.None;
 

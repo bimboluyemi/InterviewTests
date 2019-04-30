@@ -10,6 +10,6 @@ namespace GraduationTracker
 {
     public interface IGraduationTracker
     {
-        Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student);
+        Tuple<bool, STANDING, int> HasGraduated(Diploma diploma, Student student);
     }
 }
