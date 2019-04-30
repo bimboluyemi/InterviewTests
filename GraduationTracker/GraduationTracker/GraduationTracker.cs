@@ -20,13 +20,21 @@ namespace GraduationTracker
             _courseRepository = new CourseRepository();
         }
 
+        /// <summary>
+        /// To check if a student has graduated; determined by the student standing
+        /// </summary>
+        /// <param name="diploma">The diploma object</param>
+        /// <param name="student">The student object</param>
+        /// <returns>A 3-Tuple</returns>
         public Tuple<bool, STANDING, int> HasGraduated(Diploma diploma, Student student)
         {
             var credits = 0;
             var average = 0;
 
+            // get student's average
             average = GetStudentAverage(student, diploma.Requirements, out credits);
 
+            // get student standing with the calculated average
             var standing = GetStandingByAverage(average);
 
             var graduated = (standing == STANDING.Average || standing == STANDING.SumaCumLaude || standing == STANDING.MagnaCumLaude) ? true : false;
@@ -35,6 +43,13 @@ namespace GraduationTracker
 
         }
 
+        /// <summary>
+        /// Calculates the average grade of a student and credits obtained based on the diploma requirements
+        /// </summary>
+        /// <param name="student">The student object</param>
+        /// <param name="requirements">The diploma requirements</param>
+        /// <param name="credit">The student credits</param>
+        /// <returns>The Average</returns>
         private int GetStudentAverage(Student student, ICollection<Requirement> requirements, out int credit)
         {
             var average = 0;
@@ -58,6 +73,11 @@ namespace GraduationTracker
             return average / requirements.Count;
         }
 
+        /// <summary>
+        /// Gets the student's standing based on an average
+        /// </summary>
+        /// <param name="average">the student's average</param>
+        /// <returns>The standing</returns>
         private STANDING GetStandingByAverage(int average)
         {
             var standing = STANDING.None;
