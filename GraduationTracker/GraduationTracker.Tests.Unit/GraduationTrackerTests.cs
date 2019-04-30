@@ -59,7 +59,42 @@ namespace GraduationTracker.Tests.Unit
 
             // Act
             var graduated = _tracker.HasGraduated(diploma, student);
-            
+            var studentCredits = graduated.Item3;
+
+            // Assert
+            Assert.AreEqual(diploma.Credits, studentCredits);
+
+        }
+
+
+        [DataRow(4)]
+        [DataTestMethod]
+        public void TestHasNoCredits(int studentId)
+        {
+            // Arrange
+            var student = _students.Get(studentId);
+
+            // Act
+            var graduated = _tracker.HasGraduated(diploma, student);
+            var studentCredits = graduated.Item3;
+
+            // Assert
+            Assert.AreNotEqual(diploma.Credits, studentCredits);
+
+        }
+
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataTestMethod]
+        public void TestHasGraduated(int studentId)
+        {
+            // Arrange
+            var student = _students.Get(studentId);
+
+            // Act
+            var graduated = _tracker.HasGraduated(diploma, student);
+
             // Assert
             Assert.IsTrue(graduated.Item1);
 
@@ -68,7 +103,7 @@ namespace GraduationTracker.Tests.Unit
 
         [DataRow(4)]
         [DataTestMethod]
-        public void TestHasNoCredits(int studentId)
+        public void TestHasNotGraduated(int studentId)
         {
             // Arrange
             var student = _students.Get(studentId);
