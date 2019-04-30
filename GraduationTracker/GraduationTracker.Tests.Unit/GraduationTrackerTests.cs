@@ -13,19 +13,27 @@ namespace GraduationTracker.Tests.Unit
     public class GraduationTrackerTests
     {
 
-        private IGraduationTracker _tracker;
-        private IDiplomaRepository _diplomas;
-        private IStudentRepository _students;
+        private static IGraduationTracker _tracker;
+        private static IDiplomaRepository _diplomas;
+        private static IStudentRepository _students;
 
         private Diploma diploma;
 
 
         [ClassInitialize]
-        public void ClassInit()
+        public static void ClassInit(TestContext context)
         {
             _tracker = new GraduationTracker();
             _diplomas = new DiplomaRepository();
             _students = new StudentRepository();
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanUp()
+        {
+            _tracker = null;
+            _diplomas = null;
+            _students = null;
         }
         
         [TestInitialize]
@@ -37,9 +45,7 @@ namespace GraduationTracker.Tests.Unit
         [TestCleanup]
         public void TestCleanUp()
         {
-            _tracker = null;
-            _diplomas = null;
-            _students = null;
+            diploma = null;
         }
 
         [DataRow(1)]
