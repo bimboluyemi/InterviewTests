@@ -1,4 +1,8 @@
-﻿using System;
+﻿using GraduationTracker.DataObjects;
+using GraduationTracker.Enums;
+using GraduationTracker.Repository.Abstract;
+using GraduationTracker.Repository.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +11,15 @@ using System.Threading.Tasks;
 namespace GraduationTracker
 {
     public partial class GraduationTracker
-    {   
+    {
+
+        private readonly IRequirementRepository _requirementRepository;
+
+        public GraduationTracker()
+        {
+            _requirementRepository = new RequirementRepository();
+        }
+
         public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
         {
             var credits = 0;
@@ -17,7 +29,7 @@ namespace GraduationTracker
             {
                 for(int j = 0; j < student.Courses.Length; j++)
                 {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                    var requirement = _requirementRepository.Get(diploma.Requirements[i]);
 
                     for (int k = 0; k < requirement.Courses.Length; k++)
                     {
