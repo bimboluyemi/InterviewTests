@@ -46,7 +46,7 @@ namespace GraduationTracker
                 if (studentGrade != null)
                 {
                     average += studentGrade.Mark;
-                    if (studentGrade.Mark > requirement.MinimumMark)
+                    if (studentGrade.Mark >= requirement.MinimumMark)
                     {
                         var course = _courseRepository.Get(requirement.CourseId);
                         credits += course.Credits;
