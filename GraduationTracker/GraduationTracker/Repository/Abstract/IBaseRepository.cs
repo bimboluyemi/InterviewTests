@@ -9,5 +9,7 @@ namespace GraduationTracker.Repository.Abstract
     public interface IBaseRepository<T, Tk> where T : class
     {
         T Get(Tk id);
+
+        ICollection<T> GetAll();
     }
 }

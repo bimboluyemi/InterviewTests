@@ -10,31 +10,27 @@ namespace GraduationTracker.Repository.Concrete
 {
     public class RequirementRepository : IRequirementRepository
     {
+        ICourseRepository _courseRepository;
+
+        public RequirementRepository()
+        {
+            _courseRepository = new CourseRepository();
+        }
+
         public Requirement Get(int id)
         {
-            var requirements = GetRequirements();
-            Requirement requirement = null;
-
-            for (int i = 0; i < requirements.Length; i++)
-            {
-                if (id == requirements[i].Id)
-                {
-                    requirement = requirements[i];
-                }
-            }
-            return requirement;
+            return GetAll().FirstOrDefault(x => x.Id == id);
         }
         
-        public static Requirement[] GetRequirements()
+        public ICollection<Requirement> GetAll()
         {
-            return new[]
+            return new List<Requirement>
             {
-                    new Requirement{Id = 100, Name = "Math", MinimumMark=50, Courses = new int[]{1}, Credits=1 },
-                    new Requirement{Id = 102, Name = "Science", MinimumMark=50, Courses = new int[]{2}, Credits=1 },
-                    new Requirement{Id = 103, Name = "Literature", MinimumMark=50, Courses = new int[]{3}, Credits=1},
-                    new Requirement{Id = 104, Name = "Physichal Education", MinimumMark=50, Courses = new int[]{4}, Credits=1 }
-                };
+                new Requirement{Id = 100, MinimumMark=50, CourseId = 1 },
+                new Requirement{Id = 102, MinimumMark=50, CourseId = 2 },
+                new Requirement{Id = 103, MinimumMark=50, CourseId = 3 },
+                new Requirement{Id = 104, MinimumMark=50, CourseId = 4 }
+            }; 
         }
-
     }
 }

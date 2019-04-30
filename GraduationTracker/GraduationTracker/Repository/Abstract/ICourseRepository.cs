@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraduationTracker.Repository.Abstract
 {
-    public interface ICourseRepository : IBaseRepository<Course, int>
+    public interface ICourseRepository: IBaseRepository<Course, int>
     {
     }
 }

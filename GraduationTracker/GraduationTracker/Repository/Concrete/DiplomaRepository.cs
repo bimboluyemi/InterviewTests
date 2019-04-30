@@ -10,31 +10,25 @@ namespace GraduationTracker.Repository.Concrete
 {
     public class DiplomaRepository : IDiplomaRepository
     {
-        public Diploma Get(int id)
-        {
-            var diplomas = GetDiplomas();
-            Diploma diploma = null;
+        IRequirementRepository _requirementRepository;
 
-            for (int i = 0; i < diplomas.Length; i++)
-            {
-                if (id == diplomas[i].Id)
-                {
-                    diploma = diplomas[i];
-                }
-            }
-            return diploma;
+        public DiplomaRepository()
+        {
+            _requirementRepository = new RequirementRepository();
         }
 
-        private static Diploma[] GetDiplomas()
+        public Diploma Get(int id)
         {
-            return new[]
+            var diplomas = GetAll();
+            var diploma = diplomas.FirstOrDefault(x => x.Id == id);
+            return diploma;
+        }
+        
+        public ICollection<Diploma> GetAll()
+        {
+            return new List<Diploma>
             {
-                new Diploma
-                {
-                    Id = 1,
-                    Credits = 4,
-                    Requirements = new int[]{100,102,103,104}
-                }
+                new Diploma { Id = 1, Credits = 4, Requirements = _requirementRepository.GetAll() }
             };
         }
     }

@@ -42,8 +42,10 @@
   <ItemGroup>
     <Compile Include="DataObjects\Course.cs" />
     <Compile Include="DataObjects\Diploma.cs" />
+    <Compile Include="DataObjects\StudentGrade.cs" />
     <Compile Include="GraduationTracker.cs" />
     <Compile Include="Enums\STANDING.cs" />
+    <Compile Include="IGraduationTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataObjects\Requirement.cs" />
     <Compile Include="DataObjects\Student.cs" />

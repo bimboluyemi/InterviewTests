@@ -4,84 +4,74 @@ using System.Collections.Generic;
 using System.Linq;
 using GraduationTracker.DataObjects;
 using GraduationTracker.Enums;
+using GraduationTracker.Repository.Abstract;
+using GraduationTracker.Repository.Concrete;
 
 namespace GraduationTracker.Tests.Unit
 {
     [TestClass]
     public class GraduationTrackerTests
     {
-        [TestMethod]
-        public void TestHasCredits()
+
+        private IGraduationTracker _tracker;
+        private IDiplomaRepository _diplomas;
+        private IStudentRepository _students;
+
+        private Diploma diploma;
+
+
+        [ClassInitialize]
+        public void ClassInit()
         {
-            var tracker = new GraduationTracker();
+            _tracker = new GraduationTracker();
+            _diplomas = new DiplomaRepository();
+            _students = new StudentRepository();
+        }
+        
+        [TestInitialize]
+        public void TestInit()
+        {
+            diploma = _diplomas.GetAll().FirstOrDefault();
+        }
 
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
+        [TestCleanup]
+        public void TestCleanUp()
+        {
+            _tracker = null;
+            _diplomas = null;
+            _students = null;
+        }
 
-            var students = new[]
-            {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataTestMethod]
+        public void TestHasCredits(int studentId)
+        {
+            // Arrange
+            var student = _students.Get(studentId);
 
-
-            //tracker.HasGraduated()
-        };
+            // Act
+            var graduated = _tracker.HasGraduated(diploma, student);
             
-            var graduated = new List<Tuple<bool, STANDING>>();
+            // Assert
+            Assert.IsTrue(graduated.Item1);
 
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
+        }
 
-            
-            Assert.IsFalse(graduated.Any());
+
+        [DataRow(4)]
+        [DataTestMethod]
+        public void TestHasNoCredits(int studentId)
+        {
+            // Arrange
+            var student = _students.Get(studentId);
+
+            // Act
+            var graduated = _tracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.IsFalse(graduated.Item1);
 
         }
 

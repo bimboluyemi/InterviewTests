@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace GraduationTracker.DataObjects
 {
-    public class Course
+    public class StudentGrade
     {
-        public int Id { get; set; }
+        public int CourseId { get; set; }
 
-        public string Name { get; set; }
+        public int Mark { get; set; }
 
-        public int Credits { get; set; }
-     }
+    }
 }
